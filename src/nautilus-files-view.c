@@ -35,6 +35,7 @@
 #include "nautilus-error-reporting.h"
 #include "nautilus-file-undo-manager.h"
 #include "nautilus-floating-bar.h"
+#include "nautilus-view-icon-controller.h"
 #include "nautilus-list-view.h"
 #include "nautilus-canvas-view.h"
 #include "nautilus-mime-actions.h"
@@ -130,10 +131,10 @@
 
 #define MIN_COMMON_FILENAME_PREFIX_LENGTH 4
 
-
 enum
 {
     ADD_FILE,
+    ADD_FILES,
     BEGIN_FILE_CHANGES,
     BEGIN_LOADING,
     CLEAR,
@@ -4055,6 +4056,7 @@ process_old_files (NautilusFilesView *view)
     GList *files_added, *files_changed, *node;
     FileAndDirectory *pending;
     GList *selection, *files;
+    g_autoptr (GList) pending_additions = NULL;
 
     priv = nautilus_files_view_get_instance_private (view);
     files_added = priv->old_added_files;
@@ -4070,8 +4072,7 @@ process_old_files (NautilusFilesView *view)
         for (node = files_added; node != NULL; node = node->next)
         {
             pending = node->data;
-            g_signal_emit (view,
-                           signals[ADD_FILE], 0, pending->file, pending->directory);
+            pending_additions = g_list_prepend (pending_additions, pending->file);
             /* Acknowledge the files that were pending to be revealed */
             if (g_hash_table_contains (priv->pending_reveal, pending->file))
             {
@@ -4079,6 +4080,12 @@ process_old_files (NautilusFilesView *view)
                                      pending->file,
                                      GUINT_TO_POINTER (TRUE));
             }
+        }
+
+        if (files_added != NULL)
+        {
+            g_signal_emit (view,
+                           signals[ADD_FILES], 0, pending_additions, pending->directory);
         }
 
         for (node = files_changed; node != NULL; node = node->next)
@@ -8018,9 +8025,11 @@ nautilus_files_view_reset_view_menu (NautilusFilesView *view)
     gboolean show_sort_trash, show_sort_access, show_sort_modification, sort_available;
     const gchar *hint;
     g_autofree gchar *zoom_level_percent = NULL;
+    NautilusFile *file;
 
     view_action_group = nautilus_files_view_get_action_group (view);
     priv = nautilus_files_view_get_instance_private (view);
+    file = nautilus_files_view_get_directory_as_file (NAUTILUS_FILES_VIEW (view));
 
     gtk_widget_set_visible (priv->visible_columns,
                             g_action_group_has_action (view_action_group, "visible-columns"));
@@ -8028,6 +8037,8 @@ nautilus_files_view_reset_view_menu (NautilusFilesView *view)
     sort_available = g_action_group_get_action_enabled (view_action_group, "sort");
     show_sort_trash = show_sort_modification = show_sort_access = FALSE;
     gtk_widget_set_visible (priv->sort_menu, sort_available);
+    gtk_widget_set_visible (priv->sort_trash_time,
+                            nautilus_file_is_in_trash (file));
 
     /* We want to make insensitive available actions but that are not current
      * available due to the directory
@@ -8036,24 +8047,6 @@ nautilus_files_view_reset_view_menu (NautilusFilesView *view)
                               !nautilus_files_view_is_empty (view));
     gtk_widget_set_sensitive (priv->zoom_controls_box,
                               !nautilus_files_view_is_empty (view));
-
-    if (sort_available)
-    {
-        variant = g_action_group_get_action_state_hint (view_action_group, "sort");
-        g_variant_iter_init (&iter, variant);
-
-        while (g_variant_iter_next (&iter, "&s", &hint))
-        {
-            if (g_strcmp0 (hint, "trash-time") == 0)
-            {
-                show_sort_trash = TRUE;
-            }
-        }
-
-        g_variant_unref (variant);
-    }
-
-    gtk_widget_set_visible (priv->sort_trash_time, show_sort_trash);
 
     zoom_level_percent = g_strdup_printf ("%.0f%%", nautilus_files_view_get_zoom_level_percentage (view) * 100.0);
     gtk_label_set_label (GTK_LABEL (priv->zoom_level_label), zoom_level_percent);
@@ -9339,6 +9332,14 @@ nautilus_files_view_class_init (NautilusFilesViewClass *klass)
                       NULL, NULL,
                       g_cclosure_marshal_generic,
                       G_TYPE_NONE, 2, NAUTILUS_TYPE_FILE, NAUTILUS_TYPE_DIRECTORY);
+    signals[ADD_FILES] =
+        g_signal_new ("add-files",
+                      G_TYPE_FROM_CLASS (klass),
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (NautilusFilesViewClass, add_files),
+                      NULL, NULL,
+                      g_cclosure_marshal_generic,
+                      G_TYPE_NONE, 2, G_TYPE_POINTER, NAUTILUS_TYPE_DIRECTORY);
     signals[BEGIN_FILE_CHANGES] =
         g_signal_new ("begin-file-changes",
                       G_TYPE_FROM_CLASS (klass),
@@ -9698,7 +9699,7 @@ nautilus_files_view_new (guint               id,
     {
         case NAUTILUS_VIEW_GRID_ID:
         {
-            view = nautilus_canvas_view_new (slot);
+            view = NAUTILUS_FILES_VIEW (nautilus_view_icon_controller_new (slot));
         }
         break;
 

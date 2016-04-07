@@ -3,6 +3,7 @@
     "runtime": "org.gnome.Platform",
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
+    "sdk-version": "master",
     "command": "nautilus",
     "tags": ["devel", "development"],
     "desktop-file-name-prefix": "(Development) ",

@@ -101,7 +101,7 @@ typedef struct
     gboolean supports_scaling;
     gboolean supports_keep_aligned;
 
-    /* Needed for async operations. Suposedly we would use cancellable and gtask,
+    /* FIXME: Needed for async operations. Suposedly we would use cancellable and gtask,
      * sadly gtkclipboard doesn't support that.
      * We follow this pattern for checking validity of the object in the views.
      * Ideally we would connect to a weak reference and do a cancellable.

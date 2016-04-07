@@ -1,7 +1,7 @@
 [default]
 name=Default
 device=local
-runtime=org.gnome.Nautilus.json@8a0ac05428c64fa88d0296f4a1d2021b991c8bd4
+runtime=org.gnome.Nautilus.json@5f062c5ff39deaebcb5bb889fcd11917a460f71f
 config-opts=--disable-selinux
 prefix=/app
 app-id=org.gnome.Nautilus
