@@ -1,3 +1,4 @@
 [submodule "libgd"]
 	path = libgd
-	url = git://git.gnome.org/libgd
+	url = https://git.gnome.org/browse/libgd
+	branch = wip/meson
