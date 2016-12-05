@@ -1,0 +1,11 @@
+[default]
+name=Default
+device=local
+runtime=org.gnome.Nautilus.json@59297bc9557c93ae8ed6184049d0b5e8c0d0e7f5
+config-opts=--disable-selinux
+prefix=/app
+app-id=org.gnome.Nautilus
+default=true
+
+[default.environment]
+GLIB_DISABLE_DEPRECATION_WARNINGS=
