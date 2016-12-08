@@ -123,6 +123,7 @@ set_metadata_callback (GObject      *source_object,
                                         NULL,
                                         &error);
 
+      g_print ("$$$$$$ metadata response\n");
     if (res)
     {
         g_file_query_info_async (G_FILE (source_object),
@@ -134,6 +135,7 @@ set_metadata_callback (GObject      *source_object,
     }
     else
     {
+      g_print ("$$$$$$ metadata error\n");
         nautilus_file_unref (file);
         g_error_free (error);
     }
@@ -151,12 +153,15 @@ vfs_file_set_metadata (NautilusFile *file,
     info = g_file_info_new ();
 
     gio_key = g_strconcat ("metadata::", key, NULL);
+     g_print ("file %s key %s value %s\n", nautilus_file_get_uri (file), key, value);
     if (value != NULL)
     {
+        g_print ("setting attribute\n");
         g_file_info_set_attribute_string (info, gio_key, value);
     }
     else
     {
+        g_print ("unsetting attribute\n");
         /* Unset the key */
         g_file_info_set_attribute (info, gio_key,
                                    G_FILE_ATTRIBUTE_TYPE_INVALID,
@@ -187,6 +192,7 @@ vfs_file_set_metadata_as_list (NautilusFile  *file,
 
     info = g_file_info_new ();
 
+   g_print ("AS LIST file %s key %s value %s\n", nautilus_file_get_uri (file), key, value);
     gio_key = g_strconcat ("metadata::", key, NULL);
     g_file_info_set_attribute_stringv (info, gio_key, value);
     g_free (gio_key);
