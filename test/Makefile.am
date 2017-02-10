@@ -22,6 +22,7 @@ noinst_PROGRAMS =\
 	test-file-utilities-get-common-filename-prefix \
 	test-eel-string-rtrim-punctuation \
 	test-eel-string-get-common-prefix \
+	test-nautilus-link \
 	$(NULL)
 
 test_nautilus_copy_SOURCES = test-copy.c test.c
@@ -36,10 +37,12 @@ test_eel_string_rtrim_punctuation_SOURCES = test-eel-string-rtrim-punctuation.c
 
 test_eel_string_get_common_prefix_SOURCES = test-eel-string-get-common-prefix.c
 
+test_nautilus_link_SOURCES = test-nautilus-link.c
 
 TESTS = test-file-utilities-get-common-filename-prefix \
 	test-eel-string-rtrim-punctuation \
 	test-eel-string-get-common-prefix \
+	test-nautilus-link \
 	$(NULL)
 
 EXTRA_DIST = \
