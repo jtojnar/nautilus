@@ -34,3 +34,5 @@ EXTRA_DIST=					\
 DISTCHECK_CONFIGURE_FLAGS = --disable-update-mimedb --enable-gtk-doc
 
 ACLOCAL_AMFLAGS = -I m4 -I libgd ${ACLOCAL_FLAGS}
+
+@CODE_COVERAGE_RULES@

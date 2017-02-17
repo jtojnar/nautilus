@@ -19,6 +19,7 @@ AM_CPPFLAGS =							\
 	$(EXIF_CFLAGS)						\
 	$(EXEMPI_CFLAGS)                                        \
 	$(TRACKER_CFLAGS)					\
+	$(CODE_COVERAGE_CFLAGS)        				\
 	-DDATADIR=\""$(datadir)"\" 				\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DLOCALEDIR=\""$(localedir)"\"				\
@@ -27,6 +28,10 @@ AM_CPPFLAGS =							\
 	-DPREFIX=\""$(prefix)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	$(DISABLE_DEPRECATED) 		                        \
+	$(NULL)
+
+LDFLAGS =\
+	$(CODE_COVERAGE_LDFLAGS) \
 	$(NULL)
 
 LDADD =\

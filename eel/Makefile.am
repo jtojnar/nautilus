@@ -9,6 +9,7 @@ AM_CPPFLAGS =						\
 	$(BASE_CFLAGS)					\
 	$(COMMON_CFLAGS)				\
 	$(WARNING_CFLAGS)				\
+	$(CODE_COVERAGE_CFLAGS)				\
 	$(DISABLE_DEPRECATED)				\
 	-DDATADIR=\""$(datadir)"\"			\
 	-DSOURCE_DATADIR=\""$(top_srcdir)/data"\"	\
@@ -17,6 +18,7 @@ AM_CPPFLAGS =						\
 
 libeel_2_la_LDFLAGS =				\
 	-no-undefined				\
+	$(CODE_COVERAGE_LDFLAGS)		\
 	$(NULL)
 
 libeel_2_la_LIBADD = 				\

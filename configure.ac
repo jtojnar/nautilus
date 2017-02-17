@@ -68,6 +68,11 @@ AX_REQUIRE_DEFINED([GTK_DOC_CHECK])
 GTK_DOC_CHECK([1.10],[--flavour no-tmpl])
 
 dnl ==========================================================================
+
+AX_REQUIRE_DEFINED([AX_CODE_COVERAGE])
+AX_CODE_COVERAGE
+
+dnl ==========================================================================
 dnl Enable Profiling
 
 AC_ARG_ENABLE(profiling,
@@ -338,6 +343,7 @@ nautilus-$VERSION:
 	desktop support:	$enable_desktop
 
         profiling support:      ${enable_profiling}
+	code coverage:          ${enable_code_coverage}
 	nautilus-extension documentation: ${enable_gtk_doc}
 	nautilus-extension introspection: ${found_introspection}
 "
