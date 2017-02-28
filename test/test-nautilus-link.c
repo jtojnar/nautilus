@@ -46,9 +46,6 @@ test_create_link ()
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
-
-    g_unlink (generated_file_path);
-    g_rmdir (tempdir_path);
 }
 
 
@@ -199,9 +196,6 @@ test_create_link_with_icon ()
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
-
-    g_unlink (generated_file_path);
-    g_rmdir (tempdir_path);
 }
 
 
@@ -249,9 +243,6 @@ test_set_text ()
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
-
-    g_unlink (generated_file_path);
-    g_rmdir (tempdir_path);
 }
 
 
