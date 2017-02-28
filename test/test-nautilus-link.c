@@ -6,43 +6,35 @@
 static void
 test_create_link ()
 {
-    g_autofree gchar *tempdir_path = NULL;
-    g_autofree gchar *tempdir_uri = NULL;
-    gboolean result;
-    g_autoptr(GMappedFile) generated_file = NULL;
-    g_autofree gchar *generated_file_path = NULL;
-    gchar *generated_file_contents;
-    g_autofree gchar *expected_contents = NULL;
-
-    tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+    g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
     g_assert_nonnull (g_mkdtemp (tempdir_path));
-    tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+    g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
-    result = nautilus_link_local_create (tempdir_uri,
-                                         "test_link",
-                                         "Test",
-                                         NULL,
-                                         "/usr/bin/test",
-                                         NULL,
-                                         0,
-                                         FALSE);
+    gboolean result = nautilus_link_local_create (tempdir_uri,
+                                                  "test_link",
+                                                  "Test",
+                                                  NULL,
+                                                  "/usr/bin/test",
+                                                  NULL,
+                                                  0,
+                                                  FALSE);
 
     /* The function claims it succeeded */
     g_assert_true (result);
 
-    generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
-    generated_file = g_mapped_file_new (generated_file_path,
-                                        FALSE,
-                                        NULL);
+    g_autofree gchar *generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
+    g_autoptr (GMappedFile) generated_file = g_mapped_file_new (generated_file_path,
+                                                                FALSE,
+                                                                NULL);
     g_assert_nonnull (generated_file);
 
-    generated_file_contents = g_mapped_file_get_contents (generated_file);
+    gchar *generated_file_contents = g_mapped_file_get_contents (generated_file);
 
-    expected_contents = g_strdup ("[Desktop Entry]\n"
-                                  "Encoding=UTF-8\n"
-                                  "Name=Test\n"
-                                  "Type=Link\n"
-                                  "URL=/usr/bin/test\n\n");
+    g_autofree gchar *expected_contents = g_strdup ("[Desktop Entry]\n"
+                                                    "Encoding=UTF-8\n"
+                                                    "Name=Test\n"
+                                                    "Type=Link\n"
+                                                    "URL=/usr/bin/test\n\n");
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
@@ -74,12 +66,9 @@ test_create_link_null_base_name ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = NULL;
-        g_autofree gchar *tempdir_uri = NULL;
-
-        tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+        g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
         g_assert_nonnull (g_mkdtemp (tempdir_path));
-        tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+        g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
         nautilus_link_local_create (tempdir_uri,
                                     NULL,
@@ -101,13 +90,9 @@ test_create_link_null_display_name ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = NULL;
-        g_autofree gchar *tempdir_uri = NULL;
-        g_autofree gchar *generated_file_path = NULL;
-
-        tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+        g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
         g_assert_nonnull (g_mkdtemp (tempdir_path));
-        tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+        g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
         nautilus_link_local_create (tempdir_uri,
                                     "test_link",
@@ -129,13 +114,9 @@ test_create_link_null_target ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = NULL;
-        g_autofree gchar *tempdir_uri = NULL;
-        g_autofree gchar *generated_file_path = NULL;
-
-        tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+        g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
         g_assert_nonnull (g_mkdtemp (tempdir_path));
-        tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+        g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
         nautilus_link_local_create (tempdir_uri,
                                     "test_link",
@@ -155,44 +136,36 @@ test_create_link_null_target ()
 static void
 test_create_link_with_icon ()
 {
-    g_autofree gchar *tempdir_path = NULL;
-    g_autofree gchar *tempdir_uri = NULL;
-    gboolean result;
-    g_autoptr(GMappedFile) generated_file = NULL;
-    g_autofree gchar *generated_file_path = NULL;
-    gchar *generated_file_contents;
-    g_autofree gchar *expected_contents = NULL;
-
-    tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+    g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
     g_assert_nonnull (g_mkdtemp (tempdir_path));
-    tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+    g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
-    result = nautilus_link_local_create (tempdir_uri,
-                                         "test_link",
-                                         "Test",
-                                         "computer",
-                                         "/usr/bin/test",
-                                         NULL,
-                                         0,
-                                         FALSE);
+    gboolean result = nautilus_link_local_create (tempdir_uri,
+                                                  "test_link",
+                                                  "Test",
+                                                  "computer",
+                                                  "/usr/bin/test",
+                                                  NULL,
+                                                  0,
+                                                  FALSE);
 
     /* The function claims it succeeded */
     g_assert_true (result);
 
-    generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
-    generated_file = g_mapped_file_new (generated_file_path,
-                                        FALSE,
-                                        NULL);
+    g_autofree gchar *generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
+    g_autoptr (GMappedFile) generated_file = g_mapped_file_new (generated_file_path,
+                                                                FALSE,
+                                                                NULL);
     g_assert_nonnull (generated_file);
 
-    generated_file_contents = g_mapped_file_get_contents (generated_file);
+    gchar *generated_file_contents = g_mapped_file_get_contents (generated_file);
 
-    expected_contents = g_strdup ("[Desktop Entry]\n"
-                                  "Encoding=UTF-8\n"
-                                  "Name=Test\n"
-                                  "Type=Link\n"
-                                  "URL=/usr/bin/test\n"
-                                  "Icon=computer\n");
+    g_autofree gchar *expected_contents = g_strdup ("[Desktop Entry]\n"
+                                                    "Encoding=UTF-8\n"
+                                                    "Name=Test\n"
+                                                    "Type=Link\n"
+                                                    "URL=/usr/bin/test\n"
+                                                    "Icon=computer\n");
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
@@ -202,44 +175,36 @@ test_create_link_with_icon ()
 static void
 test_set_text ()
 {
-    g_autofree gchar *tempdir_path = NULL;
-    g_autofree gchar *tempdir_uri = NULL;
-    gboolean result;
-    g_autoptr(GMappedFile) generated_file = NULL;
-    g_autofree gchar *generated_file_path = NULL;
-    gchar *generated_file_contents;
-    g_autofree gchar *expected_contents = NULL;
-
-    tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
+    g_autofree gchar *tempdir_path = g_strdup ("/tmp/create_link_XXXXXX");
     g_assert_nonnull (g_mkdtemp (tempdir_path));
-    tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
+    g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
-    result = nautilus_link_local_create (tempdir_uri,
-                                         "test_link",
-                                         "Test",
-                                         "computer",
-                                         "/usr/bin/test",
-                                         NULL,
-                                         0,
-                                         FALSE);
+    gboolean result = nautilus_link_local_create (tempdir_uri,
+                                                  "test_link",
+                                                  "Test",
+                                                  "computer",
+                                                  "/usr/bin/test",
+                                                  NULL,
+                                                  0,
+                                                  FALSE);
 
     /* The function claims it succeeded */
     g_assert_true (result);
 
-    generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
-    generated_file = g_mapped_file_new (generated_file_path,
-                                        FALSE,
-                                        NULL);
+    g_autofree gchar *generated_file_path = g_strdup_printf ("%s/test_link.desktop", tempdir_path);
+    g_autoptr (GMappedFile) generated_file = g_mapped_file_new (generated_file_path,
+                                                                FALSE,
+                                                                NULL);
     g_assert_nonnull (generated_file);
 
-    generated_file_contents = g_mapped_file_get_contents (generated_file);
+    gchar *generated_file_contents = g_mapped_file_get_contents (generated_file);
 
-    expected_contents = g_strdup ("[Desktop Entry]\n"
-                                  "Encoding=UTF-8\n"
-                                  "Name=Test\n"
-                                  "Type=Link\n"
-                                  "URL=/usr/bin/test\n"
-                                  "Icon=computer\n");
+    g_autofree gchar *expected_contents = g_strdup ("[Desktop Entry]\n"
+                                                    "Encoding=UTF-8\n"
+                                                    "Name=Test\n"
+                                                    "Type=Link\n"
+                                                    "URL=/usr/bin/test\n"
+                                                    "Icon=computer\n");
 
     /* The generated file matches expectations */
     g_assert_cmpstr (expected_contents, ==, generated_file_contents);
@@ -259,7 +224,8 @@ setup_test_suite ()
 }
 
 int
-main (int   argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
     g_test_init (&argc, &argv, NULL);
 
