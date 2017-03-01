@@ -14,6 +14,8 @@ test_nautilus_directory_async = executable ('test-nautilus-directory-async',
 
 test_nautilus_link = executable ('test-nautilus-link',
                                  'test-nautilus-link.c',
+                                 'test-utils.c',
+                                 'test-utils.h',
                                  dependencies: libnautilus_dep)
 
 test_file_utilities_get_common_filename_prefix = executable ('test-file-utilities-get-common-filename-prefix',

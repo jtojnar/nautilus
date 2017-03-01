@@ -2,11 +2,12 @@
 #include <glib/gstdio.h>
 
 #include "src/nautilus-link.h"
+#include "test-utils.h"
 
 static void
 test_create_link ()
 {
-    g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+    dir_make_tmp_autoclean (tempdir_path);
     g_assert_nonnull (tempdir_path);
     g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
@@ -66,7 +67,7 @@ test_create_link_null_base_name ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+        dir_make_tmp_autoclean (tempdir_path);
         g_assert_nonnull (tempdir_path);
         g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
@@ -90,7 +91,7 @@ test_create_link_null_display_name ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+        dir_make_tmp_autoclean (tempdir_path);
         g_assert_nonnull (tempdir_path);
         g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
@@ -114,7 +115,7 @@ test_create_link_null_target ()
 {
     if (g_test_subprocess ())
     {
-        g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+        dir_make_tmp_autoclean (tempdir_path);
         g_assert_nonnull (tempdir_path);
         g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
@@ -136,7 +137,7 @@ test_create_link_null_target ()
 static void
 test_create_link_with_icon ()
 {
-    g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+    dir_make_tmp_autoclean (tempdir_path);
     g_assert_nonnull (tempdir_path);
     g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 
@@ -175,7 +176,7 @@ test_create_link_with_icon ()
 static void
 test_set_text ()
 {
-    g_autofree gchar *tempdir_path = g_dir_make_tmp (NULL, NULL);
+    dir_make_tmp_autoclean (tempdir_path);
     g_assert_nonnull (tempdir_path);
     g_autofree gchar *tempdir_uri = g_strdup_printf ("file://%s", tempdir_path);
 

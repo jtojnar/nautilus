@@ -37,7 +37,7 @@ test_eel_string_rtrim_punctuation_SOURCES = test-eel-string-rtrim-punctuation.c
 
 test_eel_string_get_common_prefix_SOURCES = test-eel-string-get-common-prefix.c
 
-test_nautilus_link_SOURCES = test-nautilus-link.c
+test_nautilus_link_SOURCES = test-nautilus-link.c test-utils.c
 
 TESTS = test-file-utilities-get-common-filename-prefix \
 	test-eel-string-rtrim-punctuation \
@@ -47,4 +47,5 @@ TESTS = test-file-utilities-get-common-filename-prefix \
 
 EXTRA_DIST = \
 	test.h \
+	test-utils.h \
 	$(NULL)
